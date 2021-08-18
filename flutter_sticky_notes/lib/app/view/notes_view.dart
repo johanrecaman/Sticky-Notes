@@ -54,9 +54,34 @@ class NotesViewState extends State<NotesView> {
             child: ListView.builder(
                 itemCount: _notesController.taskList.length,
                 itemBuilder: (context, index) {
-                  return Text(_notesController.getTask(index));
+                  return Column(
+                    children: [
+                      Card(
+                          child: ListTile(
+                        leading: Icon(
+                          Icons.stop_rounded,
+                          color: Colors.pink.shade900,
+                          size: 35,
+                        ),
+                        title: Text(
+                          _notesController.getTask(index),
+                        ),
+                        subtitle: Text('18/05'),
+                        trailing: Icon(
+                          Icons.edit,
+                          color: Colors.pink.shade900,
+                        ),
+                      )),
+                    ],
+                  );
                 }),
           ),
+          Divider(
+            color: Colors.pink.shade900,
+            height: 40,
+            thickness: 5.0,
+            endIndent: 90,
+          )
         ]));
   }
 }
