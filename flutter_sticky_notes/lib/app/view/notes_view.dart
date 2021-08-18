@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sticky_notes/app/controller/notes_controller.dart';
 
 class NotesView extends StatefulWidget {
   @override
@@ -9,14 +10,15 @@ class NotesView extends StatefulWidget {
 }
 
 class NotesViewState extends State<NotesView> {
+  TextEditingController _textEditingController = new TextEditingController();
+  NotesController _notesController = new NotesController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Text('To-Do List')),
-      ),
-      body: Column(
-        children: [
+        appBar: AppBar(
+          title: Center(child: Text('To-Do List')),
+        ),
+        body: Column(children: [
           Row(
             children: [
               Padding(
@@ -25,6 +27,7 @@ class NotesViewState extends State<NotesView> {
                     height: 50,
                     width: 250,
                     child: TextField(
+                        controller: _textEditingController,
                         decoration:
                             InputDecoration(border: OutlineInputBorder()))),
               ),
@@ -34,16 +37,26 @@ class NotesViewState extends State<NotesView> {
                   height: 50,
                   width: 110,
                   child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(),
-                    child: Text('test'),
+                    onPressed: () {
+                      setState(() {
+                        _notesController.newTask(_textEditingController.text);
+                      });
+                    },
+                    style:
+                        ElevatedButton.styleFrom(primary: Colors.pink.shade900),
+                    child: Icon(Icons.add),
                   ),
                 ),
               )
             ],
-          )
-        ],
-      ),
-    );
+          ),
+          Expanded(
+            child: ListView.builder(
+                itemCount: _notesController.taskList.length,
+                itemBuilder: (context, index) {
+                  return Text(_notesController.getTask(index));
+                }),
+          ),
+        ]));
   }
 }
