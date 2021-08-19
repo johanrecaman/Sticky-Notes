@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_notes/app/controller/notes_controller.dart';
+import 'package:flutter_sticky_notes/app/model/task_card_model.dart';
 
 class NotesView extends StatefulWidget {
   @override
@@ -10,8 +11,11 @@ class NotesView extends StatefulWidget {
 }
 
 class NotesViewState extends State<NotesView> {
-  TextEditingController _textEditingController = new TextEditingController();
+  TextEditingController _titleController = new TextEditingController();
+  TextEditingController _dateController = new TextEditingController();
   NotesController _notesController = new NotesController();
+  bool isChecked = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,21 +29,34 @@ class NotesViewState extends State<NotesView> {
                 padding: const EdgeInsets.only(top: 10, left: 10),
                 child: Container(
                     height: 50,
-                    width: 250,
+                    width: 160,
                     child: TextField(
-                        controller: _textEditingController,
-                        decoration:
-                            InputDecoration(border: OutlineInputBorder()))),
+                        controller: _titleController,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(), labelText: 'Title'))),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 10, left: 10),
                 child: Container(
                   height: 50,
-                  width: 110,
+                  width: 100,
+                  child: TextField(
+                    controller: _dateController,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(), labelText: 'Date'),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10, left: 20),
+                child: Container(
+                  height: 50,
+                  width: 70,
                   child: ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        _notesController.newTask(_textEditingController.text);
+                        _notesController.newTask(
+                            _titleController.text, _dateController.text);
                       });
                     },
                     style:
@@ -58,17 +75,22 @@ class NotesViewState extends State<NotesView> {
                     children: [
                       Card(
                           child: ListTile(
-                        leading: Icon(
-                          Icons.stop_rounded,
-                          color: Colors.pink.shade900,
-                          size: 35,
+                        leading: Checkbox(
+                          activeColor: Colors.pink.shade900,
+                          value: _notesController.getTask(index).isCompleted,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              _notesController.getTask(index).isCompleted =
+                                  value!;
+                            });
+                          },
                         ),
                         title: Text(
-                          _notesController.getTask(index),
+                          _notesController.getTask(index).title,
                         ),
-                        subtitle: Text('18/05'),
+                        subtitle: Text(_notesController.getTask(index).date),
                         trailing: Icon(
-                          Icons.edit,
+                          Icons.delete,
                           color: Colors.pink.shade900,
                         ),
                       )),
@@ -76,12 +98,6 @@ class NotesViewState extends State<NotesView> {
                   );
                 }),
           ),
-          Divider(
-            color: Colors.pink.shade900,
-            height: 40,
-            thickness: 5.0,
-            endIndent: 90,
-          )
         ]));
   }
 }
