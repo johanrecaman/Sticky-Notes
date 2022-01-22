@@ -1,14 +1,14 @@
-import 'package:flutter_sticky_notes/app/model/task_card_model.dart';
+import 'package:flutter_sticky_notes/app/model/taskCard.dart';
 
 class NotesController {
-  List<TaskCardModel> taskList = [];
+  List<TaskCard> taskList = [];
 
-  TaskCardModel getTask(int index) {
+  TaskCard getTask(int index) {
     return taskList[index];
   }
 
   void newTask(String title, String date) {
-    TaskCardModel task = new TaskCardModel(0, title, date, false);
+    TaskCard task = new TaskCard(title, date, false);
     taskList.add(task);
   }
 }

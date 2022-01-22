@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_notes/app/controller/notes_controller.dart';
-import 'package:flutter_sticky_notes/app/model/task_card_model.dart';
+import 'package:flutter_sticky_notes/app/model/taskCard.dart';
+import 'package:flutter_sticky_notes/boxes.dart';
 
 class NotesView extends StatefulWidget {
   @override
@@ -13,8 +14,7 @@ class NotesView extends StatefulWidget {
 class NotesViewState extends State<NotesView> {
   TextEditingController _titleController = new TextEditingController();
   TextEditingController _dateController = new TextEditingController();
-  NotesController _notesController = new NotesController();
-  bool isChecked = false;
+  Boxes _notesController = new Boxes();
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +69,7 @@ class NotesViewState extends State<NotesView> {
           ),
           Expanded(
             child: ListView.builder(
-                itemCount: _notesController.taskList.length,
+                itemCount: Boxes.getTasks().length,
                 itemBuilder: (context, index) {
                   return Column(
                     children: [
@@ -77,18 +77,18 @@ class NotesViewState extends State<NotesView> {
                           child: ListTile(
                         leading: Checkbox(
                           activeColor: Colors.pink.shade900,
-                          value: _notesController.getTask(index).isCompleted,
+                          value: Boxes.getTasks(),
                           onChanged: (bool? value) {
                             setState(() {
-                              _notesController.getTask(index).isCompleted =
+                              _notesController.getTasks(index).isCompleted =
                                   value!;
                             });
                           },
                         ),
                         title: Text(
-                          _notesController.getTask(index).title,
+                          _notesController.getTasks(index).title,
                         ),
-                        subtitle: Text(_notesController.getTask(index).date),
+                        subtitle: Text(_notesController.getTasks(index).date),
                         trailing: Icon(
                           Icons.delete,
                           color: Colors.pink.shade900,
